@@ -1,6 +1,6 @@
 package pl.zdusza.time;
 
-import org.slf4j.Logger;
+import pl.zdusza.event.EventLogger;
 import pl.zdusza.event.LoggableEventName;
 
 import java.time.Duration;
@@ -13,14 +13,13 @@ public class Timer {
 
     private final String context;
 
-    private final Logger logger;
+    private final EventLogger logger;
 
     private final Duration alertThreshold;
 
     private long start;
 
-
-    public Timer(final Clock clock, final String context, final Logger logger,
+    public Timer(final Clock clock, final String context, final EventLogger logger,
                  final Duration alertThreshold) {
         this.clock = clock;
         this.context = context;
@@ -28,7 +27,7 @@ public class Timer {
         this.alertThreshold = alertThreshold;
     }
 
-    public Timer(final Clock clock, final String context, final Logger logger) {
+    public Timer(final Clock clock, final String context, final EventLogger logger) {
         this(clock, context, logger, Duration.ofSeconds(1));
     }
 
@@ -39,17 +38,12 @@ public class Timer {
     public final void stop() {
         final long duration = clock.now().toEpochMilli() - start;
         if (duration <= alertThreshold.toMillis()) {
-            logger.info("{} ms:{} roundeds:{} context:{}",
-                    LoggableEventName.RESPONSE_TIME,
-                    duration,
-                    toSeconds(duration),
-                    context);
+            logger.info(LoggableEventName.RESPONSE_TIME, context, "ms:{} roundeds:{}", duration,
+                    toSeconds(duration));
         } else {
-            logger.error("{} ms:{} roundeds:{} context:{}",
-                    LoggableEventName.HIGH_RESPONSE_TIME,
-                    duration,
-                    toSeconds(duration),
-                    context);
+            logger.error(
+                    LoggableEventName.HIGH_RESPONSE_TIME, context, "ms:{} roundeds:{}", duration,
+                    toSeconds(duration));
         }
     }
 
