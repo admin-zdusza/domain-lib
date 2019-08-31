@@ -10,6 +10,8 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public enum Period {
@@ -35,19 +37,31 @@ public enum Period {
         this.temporalAdjuster = temporalAdjuster;
     }
 
-    public final Instant getStart(final Clock clock) {
-        ZonedDateTime zonedDateTime = clock.now().atZone(ZoneId.of("Poland"))
-                .minus(this.fromAmount, this.fromUnit);
+    private ZonedDateTime getStart(final ZonedDateTime now) {
+        final ZonedDateTime zonedDateTime = now.minus(this.fromAmount, this.fromUnit);
         if (temporalAdjuster.isPresent()) {
             return zonedDateTime
                     .with(this.temporalAdjuster.get())
-                    .truncatedTo(ChronoUnit.DAYS)
-                    .toInstant();
+                    .truncatedTo(ChronoUnit.DAYS);
         }
-        return zonedDateTime.truncatedTo(this.fromUnit).toInstant();
+        return zonedDateTime.truncatedTo(this.fromUnit);
     }
 
-    public final TemporalUnit getInterval() {
-        return this.interval;
+    public final Instant getStart(final Clock clock) {
+        return getStart(clock.now().atZone(ZoneId.of("Poland"))).toInstant();
+    }
+
+    public final List<Instant> getDates(final Clock clock) {
+        final ZonedDateTime now = clock.now().atZone(ZoneId.of("Poland"));
+        final List<Instant> dates = new ArrayList<>();
+        ZonedDateTime date = getStart(now);
+        while (date.toInstant().isBefore(now.toInstant())) {
+            dates.add(date.toInstant());
+            date = date.plus(1, interval);
+        }
+        if (date.equals(now)) {
+            dates.add(date.toInstant());
+        }
+        return dates;
     }
 }

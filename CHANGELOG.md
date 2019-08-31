@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2019-08-31
+### Removed
+- Get interval from Period.
+### Added
+- Get dates to Period.
+
 ## [3.1.0] - 2019-04-19
 ### Added
 - SESSION_EXPIRED, USER_NOT_LOGGED_IN, USER_NOT_REGISTERED to StorableEventName
