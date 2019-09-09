@@ -1,5 +1,5 @@
 package pl.zdusza;
 
 public enum App {
-    ACC, MON,
+    ACC, MON, ENG, MOV
 }
