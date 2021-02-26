@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [7.0.0] - 2020-02-20
+### Added
+- Storable events names
+
+### Removed
+- Storable events names
+
 ## [6.1.0] - 2020-05-04
 ### Added
 - Storable events names
