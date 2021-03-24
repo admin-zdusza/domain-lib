@@ -28,7 +28,7 @@ public class Timer {
     }
 
     public Timer(final Clock clock, final String context, final EventLogger logger) {
-        this(clock, context, logger, Duration.ofSeconds(1));
+        this(clock, context, logger, Duration.ofSeconds(2));
     }
 
     public final void start() {
